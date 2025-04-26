@@ -1,0 +1,14 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://localhost:8081
+functions:
+  hello-python:
+    lang: python3
+    handler: ./hello-python
+    image: hello-python
+    skip_build: false
+    build_options:
+      - --no-cache
+      - --squash
+

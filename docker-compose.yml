@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - functions_provider_url=http://gateway:8081/
+      - read_timeout=60
+      - write_timeout=60
+      - upstream_timeout=55
+    networks:
+      - openfaas
+
+networks:
+  openfaas:
+    driver: bridge
