@@ -1,46 +1,51 @@
+# Docker Compose configuration for OpenFaaS Fast Install
 version: "3.7"
 services:
+  # OpenFaaS Gateway service: Handles function invocations and system management
   gateway:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8081:8081"
+      - "8081:8081"  # Expose gateway on port 8081
     environment:
-      - functions_provider_url=http://gateway:8081/
-      - read_timeout=60
-      - write_timeout=60
-      - upstream_timeout=55
+      - functions_provider_url=http://gateway:8081/  # URL for function provider
+      - read_timeout=60  # Timeout for reading requests (seconds)
+      - write_timeout=60  # Timeout for writing responses (seconds)
+      - upstream_timeout=55  # Timeout for upstream function calls (seconds)
     networks:
       - openfaas
     depends_on:
-      - prometheus
-      - alertmanager
+      - prometheus  # Ensure metrics collection is available
+      - alertmanager  # Ensure alert handling is available
 
+  # Prometheus service: Metrics collection and monitoring
   prometheus:
     image: prom/prometheus:v2.48.0
     ports:
-      - "9090:9090"
+      - "9090:9090"  # Expose Prometheus UI
     volumes:
-      - ./prometheus:/etc/prometheus
+      - ./prometheus:/etc/prometheus  # Mount configuration directory
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
+      - '--config.file=/etc/prometheus/prometheus.yml'  # Main configuration file
+      - '--storage.tsdb.path=/prometheus'  # Metrics storage location
     networks:
       - openfaas
 
+  # AlertManager service: Alert handling and routing
   alertmanager:
     image: prom/alertmanager:v0.26.0
     ports:
-      - "9093:9093"
+      - "9093:9093"  # Expose AlertManager UI
     volumes:
-      - ./alertmanager:/etc/alertmanager
+      - ./alertmanager:/etc/alertmanager  # Mount configuration directory
     command:
-      - '--config.file=/etc/alertmanager/alertmanager.yml'
-      - '--storage.path=/alertmanager'
+      - '--config.file=/etc/alertmanager/alertmanager.yml'  # Main configuration file
+      - '--storage.path=/alertmanager'  # Alert storage location
     networks:
       - openfaas
 
+# Define custom network for service communication
 networks:
   openfaas:
     driver: bridge

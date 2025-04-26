@@ -1,24 +1,30 @@
+# Global Prometheus configuration
 global:
-  scrape_interval: 15s
-  evaluation_interval: 15s
+  scrape_interval: 15s      # How frequently to scrape targets
+  evaluation_interval: 15s   # How frequently to evaluate rules
 
+# AlertManager configuration
 alerting:
   alertmanagers:
     - static_configs:
         - targets:
-            - alertmanager:9093
+            - alertmanager:9093   # AlertManager service endpoint
 
+# Rules files to load
 rule_files:
-  - 'alert.rules.yml'
+  - 'alert.rules.yml'   # Load alert definitions
 
+# Scrape configurations
 scrape_configs:
+  # OpenFaaS Gateway metrics collection
   - job_name: 'openfaas-gateway'
     static_configs:
       - targets:
-          - 'gateway:8081'
-    metrics_path: /metrics
+          - 'gateway:8081'   # Gateway service endpoint
+    metrics_path: /metrics   # Path where metrics are exposed
 
+  # Prometheus self-monitoring
   - job_name: 'prometheus'
     static_configs:
       - targets:
-          - 'localhost:9090'
+          - 'localhost:9090'   # Prometheus's own metrics

@@ -1,0 +1,75 @@
+📄 Product Requirements Document (PRD)
+
+Project Title:  
+Portable OpenFaaS Deployment via Docker
+
+Prepared By:  
+Axon Geeks Ventures
+
+Last Updated:  
+April 25, 2025
+
+1. Objective
+To build a lightweight, portable solution that allows users to deploy OpenFaaS on any Linux-based server by simply running a bash script. The solution will use a pre-built Docker image containing all necessary dependencies, including OpenFaaS core components, and publish this image to Docker Hub.
+
+2. Problem Statement
+OpenFaaS requires multiple setup steps (e.g., Docker, faas-cli, Prometheus, etcd, etc.), which can be time-consuming and error-prone, especially for beginners or in rapid prototyping environments.
+
+3. Goals & Success Criteria
+
+Goals:
+- Package OpenFaaS into a single Docker image or compose setup
+- Automate deployment using a one-command bash installer
+- Enable users to run OpenFaaS with zero manual configuration
+- Push the image to Docker Hub for easy access
+
+Success Criteria:
+- install-openfaas.sh runs successfully on a clean Linux server
+- OpenFaaS UI and CLI are fully functional after deployment
+- User can deploy functions immediately via UI or CLI
+- Image is available and documented on Docker Hub
+
+4. Functional Requirements
+
+Feature | Description
+--------|-------------
+Dockerized OpenFaaS | Pre-built image that includes gateway, Prometheus, alertmanager, basic auth, etc.
+Bash Installer | A script (install-openfaas.sh) that pulls and runs the image, exposing required ports
+Preconfiguration | The image should auto-configure the gateway, dashboard, and sample credentials
+Compatibility | Should work with Docker installed on any modern Ubuntu/Debian/CentOS system
+Logging & Metrics | Prometheus should run inside the container with access to OpenFaaS metrics
+Persistent State | Optional: Include volume mounts for persistent data (functions, configs)
+
+5. Non-Functional Requirements
+- Performance: Startup time under 30 seconds
+- Portability: No external dependencies beyond Docker
+- Security: Default basic auth credentials; recommend user changes post-deployment
+- Documentation: README with usage, customization, and function deployment steps
+- Scalability: For single-node demo use only, not intended for production HA setups
+
+6. User Stories
+- As a developer, I want to run a single command to deploy OpenFaaS so that I can start deploying functions immediately.
+- As a DevOps engineer, I want to automate OpenFaaS installation on new servers to speed up setup time.
+- As a learner, I want to explore OpenFaaS in a local environment with minimal configuration.
+
+7. Deliverables
+1. Dockerfile for the base image
+2. docker-compose.yml (if needed)
+3. Prebuilt image uploaded to Docker Hub (yourname/openfaas-portable)
+4. install-openfaas.sh script
+5. README.md documentation
+
+8. Risks
+- Container size may be large due to bundled services
+- Some production features may not work in a single-container setup
+- Basic auth secrets may need enhancement for real-world use
+
+9. Timeline (Estimated)
+
+Task | Duration
+-----|---------
+Research & Dockerfile Creation | 2 days
+Container Build & Testing | 2 days
+Bash Script Creation & Testing | 1 day
+Docker Hub Integration | 1 day
+Documentation | 1 day
