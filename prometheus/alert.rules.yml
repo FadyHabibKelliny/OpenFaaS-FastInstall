@@ -1,0 +1,20 @@
+groups:
+  - name: openfaas
+    rules:
+      - alert: GatewayDown
+        expr: up{job="openfaas-gateway"} == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "OpenFaaS Gateway is down"
+          description: "Gateway has been down for more than 5 minutes"
+
+      - alert: HighLatency
+        expr: histogram_quantile(0.95, rate(gateway_function_invocation_duration_seconds_bucket[10m])) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High latency for function invocations"
+          description: "95th percentile of function invocation duration is above 500ms"
